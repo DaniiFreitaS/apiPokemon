@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokedex</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .pokemon-card {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pokedex</h1>
+    <label for="pokemon-id">Digite o ID do Pokémon:</label>
+    <input type="number" id="pokemon-id" placeholder="Ex: 25" min="1">
+    <button id="buscar-pokemon">Buscar Pokémon</button>
+    <div id="resultado"></div>
+
+    <script>
+        // Função para buscar Pokémon
+        async function buscarPokemon() {
+            const idInput = document.getElementById('pokemon-id');
+            const resultadoDiv = document.getElementById('resultado');
+            const id = idInput.value.trim();
+            console.log(idInput.value);
+
+            // Limpar o resultado anterior
+            resultadoDiv.innerHTML = '';
+
+            if (!id) {
+                resultadoDiv.innerHTML = '<p class="error">Por favor, digite um ID válido.</p>';
+                return;
+            }
+
+            try {
+                // Fazer a requisição para a API
+                const response = await fetch(`http://localhost:8080/pokemon?id=${id}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro: ${response.statusText}`);
+                }
+
+                // Parse do JSON recebido
+                const data = await response.json();
+
+                // Exibir as informações do Pokémon
+                resultadoDiv.innerHTML = `
+                    <div class="pokemon-card">
+                        <img src="/PokemonIMG/${data.name.toLowerCase()}.png" alt="Minha Figura">
+                        <h2>${data.name} (#${data.id})</h2>
+                        <p><strong>Descrição:</strong> ${data.description}</p>
+                        <p><strong>Tipo:</strong> ${data.type}</p>
+                        <p><strong>Habilidades:</strong> ${data.abilities}</p>
+                        <p><strong>Peso:</strong> ${data.weight} kg</p>
+                        <p><strong>Altura:</strong> ${data.height} m</p>
+                        <p><strong>Taxa de Captura:</strong> ${data.capture_rate}</p>
+                        <p><strong>É Lendário:</strong> ${data.is_legendary ? 'Sim' : 'Não'}</p>
+                        <p><strong>Geração:</strong> ${data.generation}</p>
+                        <p><strong>Data de Captura:</strong> ${data.capture_date}</p>
+                    </div>
+                `;
+            } catch (error) {
+                resultadoDiv.innerHTML = `<p class="error">Erro ao buscar Pokémon: ${error.message}</p>`;
+            }
+        }
+
+        // Adicionar evento ao botão
+        document.getElementById('buscar-pokemon').addEventListener('click', buscarPokemon);
+    </script>
+</body>
+</html>
