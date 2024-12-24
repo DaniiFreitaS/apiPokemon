@@ -195,7 +195,7 @@ void mostrar(Lista *l)
 
 char *listaParaString(Lista *l){
     int i;
-    char *resp = (char*)malloc(sizeof(char*));
+    char *resp = (char*)malloc(1024);
     strcpy(resp, "");
     for (i = 0; i < l->n; i++)
     {
