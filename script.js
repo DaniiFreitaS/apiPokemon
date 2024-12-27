@@ -1,21 +1,29 @@
 // Função para buscar Pokémon
 async function buscarPokemon() {
     const idInput = document.getElementById('pokemon-id');
+    const nameInput = document.getElementById('pokemon-id');
     const resultadoDiv = document.getElementById('resultado');
     const id = idInput.value.trim();
+    const name = nameInput.value;
     console.log(idInput.value);
+    console.log(name);
 
     // Limpar o resultado anterior
     resultadoDiv.innerHTML = '';
 
-    if (!id) {
+    if (!id && name == "") {
         resultadoDiv.innerHTML = '<p class="error">Por favor, digite um ID válido.</p>';
         return;
     }
 
     try {
         // Fazer a requisição para a API
-        const response = await fetch(`http://localhost:8080/pokemon?id=${id}`);
+        let response;
+        if(isNaN(name)){
+            response = await fetch(`http://localhost:8080/pokemon?name=${name}`);
+        }else{
+            response = await fetch(`http://localhost:8080/pokemon?id=${id}`);
+        }
         
         if (!response.ok) {
             throw new Error(`Erro: ${response.statusText}`);

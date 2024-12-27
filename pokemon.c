@@ -354,6 +354,18 @@ Pokemon ler(char *s)
 //Vetor Pokemon global a ser usado
 Pokemon *p[802];//cria vetor de ponteiros para pokemon
 
+int pesquisar(char* s){//pesquisa o pokemon e retorna o id
+    int resp = 0;
+    for(int i = 0; i < 801; i++){
+        if(strcmp(s, &p[i]->name) == 0){
+            resp = p[i]->id;
+            //printf("%d\n", resp);
+            i=1000;
+        }
+    }
+    return resp;
+}
+
 void startV(){
     FILE *raw = fopen("pokemon.csv", "r");//abre arquivo csv
     char str[802][500];//vetor de string com os valores do csv
@@ -400,13 +412,20 @@ int processaRequisicao(void* cls, struct MHD_Connection* connection, const char*
         return gerarResposta(connection, MHD_HTTP_METHOD_NOT_ALLOWED, "Método não permitido.");
     }
 
-    // Verificar se a URL tem o formato correto (/pokemon?id=123)
+    // Verificar se a URL tem o formato correto (/pokemon?id=181) ou (/pokemon?name=Ampharos)
     const char* id_str = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "id");
-    if (!id_str) {
-        return gerarResposta(connection, MHD_HTTP_BAD_REQUEST, "Parâmetro 'id' é necessário.");
+    const char* name_str = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "name");
+    if (!id_str && !name_str) {
+        return gerarResposta(connection, MHD_HTTP_BAD_REQUEST, "Parâmetro 'id' ou 'name' necessário.");
     }
 
-    int id = atoi(id_str);
+    int id = 1;//variavel id a ser usada com indice do vetor
+
+    if(name_str != NULL){//teste se a pesquisa sera feita pelo nome ou por id
+        id = pesquisar(name_str);
+    }else{
+        id = atoi(id_str);
+    }
 
     // Buscar Pokémon pelo ID
     Pokemon* pokemon = p[id - 1];
