@@ -6,7 +6,7 @@ async function buscarPokemon() {
     console.log(idInput.value);
 
     // Limpar o resultado anterior
-    resultadoDiv.innerHTML += '';
+    resultadoDiv.innerHTML = '';
 
     if (!id) {
         resultadoDiv.innerHTML = '<p class="error">Por favor, digite um ID válido.</p>';
@@ -25,7 +25,7 @@ async function buscarPokemon() {
         const data = await response.json();
 
         // Exibir as informações do Pokémon
-        resultadoDiv.innerHTML += `
+        resultadoDiv.innerHTML = `
             <div class="pokemon-card">
                 <img src="/PokemonIMG/${data.name.toLowerCase()}.png" alt="Minha Figura">
                 <h2>${data.name} (#${data.id})</h2>

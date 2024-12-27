@@ -1,3 +1,8 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
@@ -6,8 +11,9 @@ body {
     display: grid;
     margin: auto;
     margin-bottom: 0px;
-
+    background-color: #ccc;
     justify-content: center;
+    justify-items: center;
     border: 1px solid #ccc;
     padding: 15px;
     margin: 10px 0;
@@ -17,4 +23,18 @@ body {
 .error {
     color: red;
     font-weight: bold;
+}
+.caixa{
+    display: block;
+    background-color: cadetblue;
+}
+#resultado{
+    display: grid;
+    background-color:cadetblue;
+    gap: 20px;
+    grid-template-columns: 1fr;
+    flex-wrap: wrap;
+    place-self: center;
+    align-items: center;
+    padding: 40px;
 }
